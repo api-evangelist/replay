@@ -1,0 +1,55 @@
+generated: '2026-07-20'
+method: searched
+source: live probe of /.well-known/ across Replay hosts
+hosts:
+  - host: https://www.replay.io
+    documents:
+      - path: /.well-known/api-catalog          # RFC 9727 API catalog (linkset+json)
+        status: 200
+        file: replay-www-api-catalog.json
+      - path: /.well-known/mcp/server-card.json # MCP server card (modelcontextprotocol.io schema)
+        status: 200
+        file: replay-mcp-server-card.json
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://app.replay.io
+    documents:
+      - path: /.well-known/api-catalog           # RFC 9727 — GraphQL API + recording surface
+        status: 200
+        file: replay-app-api-catalog.json
+      - path: /.well-known/openid-configuration   # OIDC discovery (Auth0 tenant webreplay.us.auth0.com)
+        status: 200
+        file: replay-openid-configuration.json
+      - path: /.well-known/oauth-authorization-server  # RFC 8414 (Auth0)
+        status: 200
+        file: replay-oauth-authorization-server.json
+      - path: /.well-known/security.txt
+        status: 404
+  - host: https://docs.replay.io
+    documents:
+      - path: /.well-known/api-catalog            # RFC 9727 — protocol + GraphQL + MCP
+        status: 200
+        file: replay-docs-api-catalog.json
+      - path: /.well-known/openid-configuration
+        status: 200
+      - path: /.well-known/security.txt
+        status: 404
+  - host: https://api.replay.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+notes: >
+  Replay publishes RFC 9727 API-catalog linksets on www/app/docs that advertise the GraphQL
+  API (https://api.replay.io/v1/graphql), the Replay MCP server (https://dispatch.replay.io/nut/mcp),
+  the Replay Protocol, and the status page. Auth for the web app is delegated to an Auth0 tenant
+  (webreplay.us.auth0.com), exposed via OIDC/OAuth discovery documents.

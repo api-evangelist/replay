@@ -1,0 +1,30 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.replay.io/blog
+scheme: dated-blog       # numbered "Changelog NN" posts historically; product updates on the blog
+url: https://www.replay.io/blog
+entries:
+  - title: Replay QA tests the app you built with AI
+    date: '2026-06-17'
+    highlights: [Replay QA runs real browser tests on AI-built apps, records every session, finds bugs and returns root cause plus fix]
+  - title: How to Set Up Replay MCP with Codex in Under 10 Minutes
+    date: '2026-06-02'
+    highlights: [Connect the Replay MCP server to the Codex CLI for autonomous bug investigation]
+  - title: How to Set Up Replay MCP with Claude Code in Under 10 Minutes
+    date: '2026-06-02'
+    highlights: [Integrate Replay MCP with Claude Code for time-travel debugging over browser recordings]
+  - title: 'The Greenfield Games Episode 1: An Autonomous App Builder Beat Two Human Teams'
+    date: '2026-05-25'
+    highlights: [C.H.A.D.S. autonomous AI agent system powered by Replay debugging]
+  - title: Replay QA
+    date: '2026-05-18'
+    highlights: [Automatic web application quality assurance]
+  - title: 'Replay Time Travelogue: Improving Nadia''s Debugging with AI Results Using Replay MCP'
+    date: '2026-04-20'
+    highlights: [Case study on AI debugging performance improvements with MCP]
+  - title: Web Debug Bench
+    date: '2026-04-07'
+    highlights: [A benchmark for testing agent debugging]
+notes: >
+  Replay historically published numbered "Changelog NN" posts (e.g. Changelog 53 "Replay for Test
+  Suites"); the current cadence is product-update posts on the blog. Recent window only.

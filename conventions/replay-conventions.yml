@@ -1,0 +1,38 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.replay.io/reference/integrations/replay-apis/graphql-api
+authentication:
+  style: bearer
+  header: 'Authorization: Bearer ${REPLAY_API_KEY}'
+  ref: authentication/replay-authentication.yml
+transport:
+  graphql:
+    endpoint: https://api.replay.io/v1/graphql
+    method: POST
+    content_type: application/json
+    body_fields: [query, variables]
+  protocol:
+    name: Replay Protocol
+    transport: websocket
+    reference: https://static.replay.io/protocol/tot/
+    client: '@replayio/protocol'
+  mcp:
+    endpoint: https://dispatch.replay.io/nut/mcp
+    transport: http
+error_envelope:
+  style: graphql
+  shape: "Responses return { data } on success or { errors: [...] } on failure (standard GraphQL error array)."
+idempotency:
+  supported: false
+  notes: GraphQL mutations; no documented idempotency-key header.
+pagination:
+  style: graphql
+  notes: Standard GraphQL field-level selection; connection/cursor patterns depend on the queried type.
+versioning:
+  style: uri-path
+  current: v1
+  ref: lifecycle/replay-lifecycle.yml
+notes: >
+  Cross-cutting semantics for Replay's programmatic surfaces. The primary API is GraphQL (single
+  POST endpoint), complemented by the WebSocket Replay Protocol and the HTTP MCP server. Because
+  the surface is GraphQL/MCP rather than REST, there is no idempotency-key contract to advertise.

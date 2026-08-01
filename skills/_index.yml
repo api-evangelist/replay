@@ -1,0 +1,19 @@
+generated: '2026-07-20'
+method: searched
+source: https://github.com/replayio/skills
+install: npx skills add https://github.com/replayio/skills --skill '*'
+skills:
+  - file: replay-cli.md
+    name: replay-cli
+    description: Record your application to gather performance data and debug issues; install the Replay CLI, record a session, upload and manage recordings.
+  - file: replay-mcp.md
+    name: replay-mcp
+    description: Use the Replay MCP server to inspect the contents of replay.io recordings (exploratory + explanatory time-travel tools).
+  - file: replay-playwright.md
+    name: replay-playwright
+    description: Set up and run Playwright tests with the Replay Browser to record test executions for debugging and performance analysis.
+  - file: replay-cypress.md
+    name: replay-cypress
+    description: Set up and configure Replay for recording Cypress tests with time-travel debugging.
+notes: >
+  Provider-published Agent Skills, saved verbatim from the replayio/skills GitHub repository.

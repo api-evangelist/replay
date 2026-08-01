@@ -1,0 +1,58 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.npmjs.com/ (registry.npmjs.org) + https://github.com/replayio/replay-cli
+packages:
+  - language: javascript
+    registry: npm
+    name: replayio
+    version: 1.8.2
+    url: https://www.npmjs.com/package/replayio
+    install: npm i -g replayio
+    repository: https://github.com/replayio/replay-cli
+    description: CLI tool for uploading and managing Replay recordings.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@replayio/protocol"
+    version: 0.103.0
+    url: https://www.npmjs.com/package/@replayio/protocol
+    install: npm install @replayio/protocol
+    description: TypeScript definition of the Replay (Record Replay) protocol.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@replayio/playwright"
+    version: 5.0.3
+    url: https://www.npmjs.com/package/@replayio/playwright
+    install: npm install --save-dev @replayio/playwright
+    repository: https://github.com/replayio/replay-cli
+    description: Configuration utilities for using the Replay browsers with Playwright.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@replayio/cypress"
+    version: 3.1.5
+    url: https://www.npmjs.com/package/@replayio/cypress
+    install: npm install --save-dev @replayio/cypress
+    repository: https://github.com/replayio/replay-cli
+    description: Plugin to record your Cypress tests with Replay.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@replayio/test-utils"
+    version: 3.0.7
+    url: https://www.npmjs.com/package/@replayio/test-utils
+    install: npm install @replayio/test-utils
+    repository: https://github.com/replayio/replay-cli
+    description: Utilities for recording tests with replay.io.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@replayio/replay"
+    version: 0.22.12
+    url: https://www.npmjs.com/package/@replayio/replay
+    install: npm install @replayio/replay
+    repository: https://github.com/replayio/replay-cli
+    description: Legacy CLI tool for uploading and managing recordings (superseded by replayio).
+    official: true
+    deprecated: true

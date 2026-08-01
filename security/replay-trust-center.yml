@@ -1,0 +1,12 @@
+generated: '2026-07-20'
+method: searched
+probe: true
+url: https://www.replay.io/blog/replay-achieves-soc2
+certifications: [SOC 2 Type 2]
+evidence:
+  - {source: https://www.replay.io/blog/replay-achieves-soc2, keywords: [soc 2, soc2 type 2, security controls, auditors]}
+  - {source: https://www.replay.io/privacy-policy, keywords: [security, security@replay.io, security patches]}
+notes: >
+  Replay achieved SOC 2 Type 2 (announced on the Replay blog). Security posture and the
+  security@replay.io contact are documented on the Security & Privacy page; no dedicated
+  trust.replay.io portal was found.

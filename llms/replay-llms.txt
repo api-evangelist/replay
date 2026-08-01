@@ -1,0 +1,24 @@
+# Replay
+
+> Replay is an AI-native QA platform. Replay QA autonomously explores your web app, records every session with time-travel debugging, finds real bugs, and gives your coding agent the root cause and fix.
+
+## Pages
+
+- [Replay QA — AI wrote the app. Replay QA finds what broke.](https://www.replay.io/agent/index.md): Add your GitHub repo for continuous testing, or drop in a URL for a one-time check. Replay QA explores your app, finds real bugs, and gives your coding agent the root cause and fix.
+- [How Replay QA Works](https://www.replay.io/agent/how-it-works.md): From URL to bug report — automatically. See how Replay QA explores your app, records every session, and delivers root cause and fix for every bug it finds.
+- [Replay for Engineers — Runtime Context for Your Coding Agent](https://www.replay.io/agent/engineers.md): Replay MCP gives your coding agent the runtime context it needs to fix bugs — not loop on them. Root cause analysis, implementation-ready fixes, works in your existing workflow.
+- [Replay for Vibe Coders — Vibe Fearlessly with the Replay Chrome Extension](https://www.replay.io/agent/vibe-coders.md): The Replay Chrome extension is like having a senior engineer watching over your shoulder, catching bugs, finding root causes, and telling the AI exactly how to fix them.
+- [Replay Precog — Debugging for Code You Haven&#x27;t Written Yet](https://www.replay.io/agent/precog.md): Replay Precog delivers deterministic root-cause analysis for bugs before they happen. April Fools announcement and real Replay MCP quickstart.
+- [Design Partner Program — Replay](https://www.replay.io/agent/partner.md): Join the Replay Design Partner Program. Get free access to Replay MCP, a direct line to the engineering team, and help shape the future of agent-powered debugging.
+- [Pricing — Replay](https://www.replay.io/agent/pricing.md): Simple, usage-based pricing. Start free with 25 credits per month. Upgrade as you grow.
+- [Individual Debugging — Fix bugs your agent can&#x27;t figure out](https://www.replay.io/agent/debugging.md): Replay is a time-travel debugger. Record your app, capture every function call and state change, and let your coding agent analyze it with Replay MCP.
+- [ROI Calculator — Replay](https://www.replay.io/agent/roi-calculator.md): Estimate how much debugging time and engineering cost your team will save by plugging Replay into your CI/CD pipeline.
+- [About Replay — Making Software Visible](https://www.replay.io/agent/about.md): Replay records your software and shows you exactly what happened. Founded by ex-Mozilla engineers, we&#x27;re building the debugging tools that AI agents and developers need to fix bugs on the first try.
+- [Security and Privacy](https://www.replay.io/agent/privacy-policy.md)
+- [Terms of Service](https://www.replay.io/agent/terms-of-service.md)
+- [Security and Privacy](https://www.replay.io/agent/security-and-privacy.md)
+
+## Documentation
+
+- [Replay Docs](https://docs.replay.io)
+- [MCP Tools](https://docs.replay.io/reference/mcp-tools)

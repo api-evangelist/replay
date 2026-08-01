@@ -1,0 +1,45 @@
+generated: '2026-07-20'
+method: searched
+source: https://docs.replay.io/reference/replay-cli/commands
+name: replayio
+package: packages/replay-packages.yml
+repository: https://github.com/replayio/replay-cli
+install:
+  - npm i -g replayio
+  - yarn add -g replayio
+  - pnpm i -g replayio
+  - bun i -g replayio
+authentication:
+  local: replayio login  # opens a browser to authenticate
+  ci: Create an API key in Replay DevTools and set REPLAY_API_KEY in the environment.
+commands:
+  - name: info
+    description: Displays information about installed Replay dependencies (CLI version, Replay Browser info).
+  - name: list
+    description: Output all local and uploaded recordings (id, host, date, duration, status).
+    options: ["--json"]
+  - name: login
+    description: Authenticate to your Replay account through the browser.
+  - name: logout
+    description: Sign out from your account (does not invalidate API keys).
+  - name: record
+    args: "[url]"
+    description: Launch the Replay Browser and start recording the given URL (default about:blank).
+  - name: remove
+    args: "[ids...]"
+    options: ["-a", "--all"]
+    description: Delete recordings interactively or by IDs; --all removes all local recordings.
+  - name: update
+    description: Update the Replay Browser to the latest version.
+  - name: upload
+    args: "[ids...]"
+    description: Upload recordings interactively or by specifying recording IDs; returns a view URL.
+  - name: upload-source-maps
+    args: "<paths...>"
+    options: ["-g/--group", "-x/--extensions", "-i/--ignore", "--root"]
+    description: Upload source maps for a workspace, grouped by release/commit.
+  - name: help
+    description: Display all available commands and descriptions.
+notes: >
+  All commands accept -h/--help. Companion packages @replayio/playwright and @replayio/cypress
+  provide `npx replayio install` to install the Replay Chromium browser for test recording.

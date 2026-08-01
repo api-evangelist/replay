@@ -1,0 +1,86 @@
+generated: '2026-07-20'
+method: searched
+status: published
+source: https://docs.replay.io/basics/replay-mcp/overview
+server_card: well-known/replay-mcp-server-card.json
+server:
+  name: Replay MCP
+  version: '1'
+  transport: http
+  # "Any recording" mode — tools accept a recordingId parameter
+  url: https://dispatch.replay.io/nut/mcp
+  # "Specific recording" mode — recording is fixed in the URL, tools omit recordingId
+  url_per_recording: https://dispatch.replay.io/nut/recording/<recording-id>/mcp
+  authentication:
+    type: bearer
+    header: Authorization
+    description: Replay API key from https://app.replay.io/team/settings
+  capabilities:
+    tools: true
+    prompts: false
+    resources: false
+  documentation: https://docs.replay.io/basics/replay-mcp/quickstart
+  homepage: https://www.replay.io
+install:
+  skill: npx skills add https://github.com/replayio/skills --skill 'replay-mcp'
+  claude_code_config: |
+    {
+      "mcpServers": {
+        "replay": {
+          "type": "http",
+          "url": "https://dispatch.replay.io/nut/mcp",
+          "headers": { "Authorization": "${REPLAY_API_KEY}" }
+        }
+      }
+    }
+tools:
+  - name: ListSources
+    description: List all source files in the recording. Supports glob filtering to narrow results.
+  - name: ReadSource
+    description: Read source code centered on a specific line, annotated with which statements actually executed during the recording.
+  - name: SearchSources
+    description: Regex search across all source files, with results annotated to show which matches are in code that actually ran.
+  - name: ConsoleMessages
+    description: View all console log, warn, and error messages from the recording.
+  - name: Screenshot
+    description: List available screenshot timestamps, or fetch a screenshot at a specific moment showing visual state, mouse position, and recent mouse movements.
+  - name: DescribePoint
+    description: Describe application state at a specific execution point — variables in scope, code context, and optionally the full dependency chain.
+  - name: Evaluate
+    description: Evaluate any JavaScript expression at a specific execution point, like running code in the DevTools console at any moment in the recording.
+  - name: GetStack
+    description: Get the call stack at an execution point — see which functions called which to reach that moment.
+  - name: Logpoint
+    description: Set a virtual breakpoint at a source location and evaluate an expression at every hit.
+  - name: InspectElement
+    description: Get size, layout, DOM ancestry, and render information for a DOM element, identified by CSS selector or element reference.
+  - name: UncaughtException
+    description: Find all uncaught JavaScript exceptions in the recording, with stack traces and execution points.
+  - name: ReactException
+    description: Find exceptions that caused React to unmount — error boundary triggers, fatal render errors, and similar React-specific crashes.
+  - name: NetworkRequest
+    description: List all HTTP requests, or get detailed information about a specific request including headers, body, status, and timing.
+  - name: LocalStorage
+    description: View all localStorage read and write operations that occurred during the recording.
+  - name: ReactComponentTree
+    description: View the React component hierarchy at any point in the recording.
+  - name: GetPointComponent
+    description: Identify which React component was being rendered at a specific execution point.
+  - name: DescribeComponent
+    description: Get the full render history of a named component — every render, its props, and what triggered each render.
+  - name: ReactRenders
+    description: Multi-mode render analysis tool for understanding React component render behavior and performance.
+  - name: DescribeReactRender
+    description: Trace a specific render trigger back through the dependency chain to find the root cause, with component render counts.
+  - name: PlaywrightSteps
+    description: List all steps from a Playwright test with timestamps, stack traces, and error information.
+  - name: ProfileStatements
+    description: Profile JavaScript statement execution between two points with flat profile and call tree analysis.
+  - name: ProfileGraph
+    description: Profile dependency graph entries (React fiber renders, effect calls) between two points.
+  - name: ExecutionDelay
+    description: Analyze per-function execution delays in a source file based on source length and breakpoint timing.
+  - name: ProfileSampling
+    description: Low-level native engine stack sampling for profiling the Replay runtime itself.
+  - name: GetPointLink
+    description: Generate a shareable app.replay.io URL for a specific execution point.

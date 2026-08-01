@@ -1,0 +1,31 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.replay.io/blog/replay-achieves-soc2
+standards:
+  - id: soc2-type2
+    conforms: true
+    evidence: "Replay achieved SOC 2 Type 2; third-party auditors reviewed baseline security controls (blog: Replay achieves SOC2)."
+    url: https://www.replay.io/blog/replay-achieves-soc2
+  - id: oauth2
+    conforms: true
+    evidence: "OAuth 2.0 authorization server discovery served at app.replay.io/.well-known/oauth-authorization-server (Auth0 tenant)."
+    source: well-known/replay-oauth-authorization-server.json
+  - id: oidc
+    conforms: true
+    evidence: "OpenID Connect discovery document served at app.replay.io/.well-known/openid-configuration (issuer https://webreplay.us.auth0.com/)."
+    source: well-known/replay-openid-configuration.json
+  - id: rfc9727-api-catalog
+    conforms: true
+    evidence: "RFC 9727 application/linkset+json API-catalog documents published at /.well-known/api-catalog on www/app/docs."
+    source: well-known/replay-app-api-catalog.json
+  - id: graphql
+    conforms: true
+    evidence: "Primary programmatic API is GraphQL at https://api.replay.io/v1/graphql."
+    url: https://docs.replay.io/reference/integrations/replay-apis/graphql-api
+  - id: mcp
+    conforms: true
+    evidence: "Publishes a Model Context Protocol server with a modelcontextprotocol.io server-card at /.well-known/mcp/server-card.json."
+    source: well-known/replay-mcp-server-card.json
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: "GraphQL errors[] envelope is used; no RFC 9457 problem+json observed."

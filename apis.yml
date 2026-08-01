@@ -1,9 +1,28 @@
 aid: replay
 name: Replay
-description: Replay is a company surfaced as a portfolio company of a16z, version-one-ventures and added
-  to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Replay is an AI-native QA and time-travel debugging platform for web applications. Replay QA
+  autonomously explores a web app, records every session in a deterministic Replay Browser, finds
+  real bugs, and hands a coding agent the root cause and a suggested fix. The recording is a
+  time-travel database of everything that happened in the browser — sources, console, network,
+  DOM, React renders — inspectable after the fact without reproducing the bug locally. Replay
+  exposes this programmatically through a GraphQL API, a WebSocket Replay Protocol, a published
+  Model Context Protocol (MCP) server for agent debugging, a CLI (replayio), and Playwright/Cypress
+  recording integrations. Backed by a16z and Version One Ventures.
 url: https://raw.githubusercontent.com/api-evangelist/replay/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.replay.io/replayQA_og-image.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -13,10 +32,30 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
-apis: []
+- Debugging
+- Testing
+- Quality Assurance
+- Developer Tools
+- Time Travel Debugging
+- MCP
+- GraphQL
+- Browser Automation
+- AI
+apis:
+- name: Replay GraphQL API
+  description: >-
+    GraphQL API for retrieving workspace and user metadata — replays/recordings, team members, and
+    comments on a replay. POST queries to the endpoint with a Replay API key as a bearer token.
+  humanURL: https://docs.replay.io/reference/integrations/replay-apis/graphql-api
+  baseURL: https://api.replay.io/v1/graphql
+  properties:
+  - type: Authentication
+    url: authentication/replay-authentication.yml
+  - type: Conventions
+    url: conventions/replay-conventions.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,3 +64,68 @@ maintainers:
 common:
 - type: Website
   url: https://www.replay.io
+- type: DeveloperPortal
+  url: https://docs.replay.io
+- type: Documentation
+  url: https://docs.replay.io
+- type: APIReference
+  url: https://docs.replay.io/reference/integrations/replay-apis/replay-protocol
+- type: GettingStarted
+  url: https://docs.replay.io/basics/getting-started/record-your-app
+- type: Blog
+  url: https://www.replay.io/blog
+- type: GitHubOrganization
+  url: https://github.com/replayio
+- type: Pricing
+  url: https://www.replay.io/pricing
+- type: SignUp
+  url: https://app.replay.io/login
+- type: Support
+  url: mailto:support@replay.io
+- type: TermsOfService
+  url: https://www.replay.io/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.replay.io/privacy-policy
+- type: StatusPage
+  url: https://status.replay.io
+- type: MCPServer
+  url: mcp/replay-mcp.yml
+- type: Packages
+  url: packages/replay-packages.yml
+- type: SDKs
+  url: packages/replay-packages.yml
+- type: CLI
+  url: cli/replay-cli.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/replay-well-known.yml
+- type: APICatalog
+  url: well-known/replay-www-api-catalog.json
+- type: Authentication
+  url: authentication/replay-authentication.yml
+- type: Conventions
+  url: conventions/replay-conventions.yml
+- type: ChangeLog
+  url: changelog/replay-changelog.yml
+- type: Lifecycle
+  url: lifecycle/replay-lifecycle.yml
+- type: Conformance
+  url: conformance/replay-conformance.yml
+- type: Compliance
+  url: https://www.replay.io/blog/replay-achieves-soc2
+- type: TrustCenter
+  url: security/replay-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/replay-vulnerability-disclosure.yml
+- type: Security
+  url: https://www.replay.io/privacy-policy
+- type: DomainSecurity
+  url: security/replay-domain-security.yml
+- type: LLMsTxt
+  url: llms/replay-llms.txt
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
