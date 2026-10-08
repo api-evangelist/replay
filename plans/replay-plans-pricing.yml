@@ -1,0 +1,53 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://www.replay.io/pricing
+sources:
+- https://www.replay.io/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-07'
+  evidence: On-Prem $5,000+ per month · starting price For running Replay inside your own infrastructure
+  managed_tier: Starter
+published: true
+note: FAQ states Starter ($20/mo) and Pro ($200/mo), differing from the monthly-toggle card prices shown
+  ($17/$170 annual-equivalent). Private Cloud and On-Prem list starting prices but say 'Contact sales'.
+plan_count: 5
+currency: USD
+plans:
+- name: Free
+  price_text: $0
+  price: 0
+  currency: USD
+  period: month
+  included_quota: 25 credits a month, no time limit, no credit card required.
+- name: Starter
+  price_text: $ 17 per month · $204 billed annually
+  currency: USD
+  period: month
+  included_quota: 50 credits a month
+- name: Pro
+  price_text: $ 170 per month · $2,040 billed annually
+  currency: USD
+  period: month
+  included_quota: 500 credits a month
+- name: Private Cloud
+  price_text: $1,000+ per month · starting price
+  price: 1000
+  currency: USD
+  period: month
+  included_quota: Storage bucket your company owns, dedicated cluster resources
+- name: On-Prem
+  price_text: $5,000+ per month · starting price
+  price: 5000
+  currency: USD
+  period: month
+  included_quota: Running Replay inside your own infrastructure
+  overage: Volume-based usage can increase this price.
