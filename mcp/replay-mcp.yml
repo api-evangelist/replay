@@ -25,70 +25,194 @@ install:
     url\": \"https://dispatch.replay.io/nut/mcp\",\n      \"headers\": { \"Authorization\": \"${REPLAY_API_KEY}\"\
     \ }\n    }\n  }\n}\n"
 tools:
-- name: ListSources
-  description: List all source files in the recording. Supports glob filtering to narrow results.
-- name: ReadSource
-  description: Read source code centered on a specific line, annotated with which statements actually
-    executed during the recording.
-- name: SearchSources
-  description: Regex search across all source files, with results annotated to show which matches are
-    in code that actually ran.
 - name: ConsoleMessages
-  description: View all console log, warn, and error messages from the recording.
-- name: Screenshot
-  description: List available screenshot timestamps, or fetch a screenshot at a specific moment showing
-    visual state, mouse position, and recent mouse movements.
+  description: 'Show console API messages (console.log, console.warn, console.error, etc.). Note: console
+    errors are distinct from runtime exceptions — use UncaughtException and ReactException for those.
+    Start with mode ''summary'' for an overview with message counts and the last errors/warnings. Use
+    ''messages'' to browse the full paginated list (filter by level, text, node_modules visibility). Use
+    ''message-detail'' with a point reference for full detail on a single message including stack trace.
+    Call RecordingOverview first for broader context.'
+- name: Annotations
+  description: Inspect the annotations in a recording. Annotations are timestamped records attached by
+    the runtime and integrations (e.g. Cypress, Playwright, React DevTools, network, localStorage). Call
+    with no arguments to list all annotation kinds in the recording with their counts. Pass a 'kind' to
+    return the annotation data for that kind (paginated, optionally filtered by text). For WebSocket traffic
+    (DOMWebSocket annotations), use the WebSocketMessages tool instead.
 - name: DescribePoint
-  description: Describe application state at a specific execution point — variables in scope, code context,
-    and optionally the full dependency chain.
+  description: Describes the application state at a code execution point. Shows the containing function
+    with executed/not-executed annotations, variable values, and timestamps. Use dependencyChain=true
+    to trace the full causal chain back to the origin event. Get execution points from other tools (ConsoleMessages,
+    ReactRenders, ReduxActions, Logpoint, etc.).
 - name: Evaluate
-  description: Evaluate any JavaScript expression at a specific execution point, like running code in
-    the DevTools console at any moment in the recording.
+  description: Evaluates an expression at a code execution point. Use for ad-hoc value inspection beyond
+    what DescribePoint shows. Expressions must be synchronous and immediately inspectable. Do not use
+    async functions or promises; replay cannot inspect their eventual results. Defaults to frame scope;
+    use global scope explicitly when needed. String results are returned in full up to maxStringLength
+    characters (default 100000); longer strings end with a truncation notice giving the stringOffset to
+    read the next part. String results longer than about 8,000 characters are read by evaluating the expression
+    a second time, so use a single, side-effect-free expression to get the full text.
 - name: GetStack
-  description: Get the call stack at an execution point — see which functions called which to reach that
-    moment.
-- name: Logpoint
-  description: Set a virtual breakpoint at a source location and evaluate an expression at every hit.
-- name: InspectElement
-  description: Get size, layout, DOM ancestry, and render information for a DOM element, identified by
-    CSS selector or element reference.
-- name: UncaughtException
-  description: Find all uncaught JavaScript exceptions in the recording, with stack traces and execution
-    points.
-- name: ReactException
-  description: Find exceptions that caused React to unmount — error boundary triggers, fatal render errors,
-    and similar React-specific crashes.
-- name: NetworkRequest
-  description: List all HTTP requests, or get detailed information about a specific request including
-    headers, body, status, and timing.
-- name: LocalStorage
-  description: View all localStorage read and write operations that occurred during the recording.
-- name: ReactComponentTree
-  description: View the React component hierarchy at any point in the recording.
+  description: Gets the call stack at a code execution point. Use to understand execution context. Pair
+    with DescribePoint for full state.
 - name: GetPointComponent
-  description: Identify which React component was being rendered at a specific execution point.
-- name: DescribeComponent
-  description: Get the full render history of a named component — every render, its props, and what triggered
-    each render.
+  description: Gets the React component being rendered at a code execution point.
+- name: InspectElement
+  description: Get size, layout, ancestry and render point information for a DOM element. Find relevant
+    code before inspecting elements. Only use this tool sparingly — expensive, requires full DOM layout
+    computation. Prefer ReactComponentTree for component structure.
+- name: LocalStorage
+  description: 'Describe all the accesses made to localStorage. Start with mode ''summary'' (default)
+    for a grouped overview: keys with access counts, final values, and timing. Use ''operations'' to browse
+    the full chronological access list with pagination. Use keyFilter to narrow by key name (substring
+    match). For large apps, consider filtering by key pattern in results.'
+- name: Logpoint
+  description: Evaluates an expression at breakpoint hits for a given path and line number. Returns up
+    to 20 hits with their expression evaluation results. Use beginPoint/endPoint to narrow the range.
+    Use column to target a specific statement on the line. Find source paths with ListSources or SearchSources
+    first.
+- name: NetworkRequest
+  description: 'Analyze network requests in the recording. Start with mode ''summary'' (default) for high-level
+    stats: total count, failed/slow counts, status code distribution, and top domains. Use ''requests''
+    to browse a paginated table of all requests (filterable by urlFilter, startTime, endTime). Use ''detail''
+    with requestId (from the ID column in the ''requests'' table) for full request/response headers, body
+    content, event timeline, and backend function analysis. RECOMMENDED workflow: summary → requests →
+    detail. Call RecordingOverview first for broader context about the recording.'
+- name: WebSocketMessages
+  description: Inspect the WebSocket connections in a recording and the messages sent and received on
+    them. Default mode 'connections' lists each connection with its URL, status (open, open until the
+    recording ended, still connecting, never connected, failed to connect, dropped, closed by client,
+    closed) and message counts. Mode 'connection' lists the messages on a connection (paginated, filterable
+    by direction and text); sent messages include a point reference for the send() call. Mode 'message'
+    shows the contents of one message by messageId. JSON messages too large to show whole are shown as
+    an outline of keys, types and sizes; pass path (e.g. 'result.items.3') to see one part. Unknown connectionId
+    or messageId values are rejected with the list of valid IDs.
+- name: ReactComponentTree
+  description: Get the structure of the committed/mounted React component tree at a point in time. Start
+    with mode='summary' for an overview of component counts and top-level structure. Use mode='tree' to
+    see a paginated, depth-limited hierarchy with collapse markers. Use mode='subtree' with 'component'
+    to focus on a specific component's ancestors and descendants. Use 'nameFilter' to search for components
+    by name. Use 'hideFilter' to remove noise (e.g. Provider, Consumer). For render-level analysis (timing,
+    waste, causes), use ReactRenders instead.
 - name: ReactRenders
-  description: Multi-mode render analysis tool for understanding React component render behavior and performance.
-- name: DescribeReactRender
-  description: Trace a specific render trigger back through the dependency chain to find the root cause,
-    with component render counts.
-- name: PlaywrightSteps
-  description: List all steps from a Playwright test with timestamps, stack traces, and error information.
-- name: ProfileStatements
-  description: Profile JavaScript statement execution between two points with flat profile and call tree
-    analysis.
-- name: ProfileGraph
-  description: Profile dependency graph entries (React fiber renders, effect calls) between two points.
+  description: Analyze React renders in a recording. Start with mode 'summary' for a recording-wide overview
+    of commits and render time. Use 'waste-rank' to find components with the most wasted renders. Use
+    'commits' to browse render commits chronologically. Use 'commit' with commitIndex for single commit
+    detail (get indices from 'commits'). Use 'component' with componentName to see a component across
+    all commits (get names from 'waste-rank'). Use 'fiber' with fiberId to see all renders for a specific
+    fiber instance (add includeProps=true for prop values at each render). Use 'trigger-detail' with commitIndex
+    to trace the dependency chain (click, network, dispatch) that triggered a commit. Use 'commit-fibers'
+    and 'fiber-cause' for fiber-level causation analysis. Call RecordingOverview first for broader context.
+- name: UserInteractions
+  description: Show all user interactions (clicks and key presses) in the recording. Start with mode 'summary'
+    (default) for interaction counts by type, time range, top keys pressed, and activity timeline. Use
+    'interactions' to browse a paginated chronological list with point references for DescribePoint, Evaluate,
+    or GetStack. Use type filter ('click' or 'keypress') to narrow by interaction kind. Useful for understanding
+    the sequence of user actions that led to a bug.
+- name: ReduxActions
+  description: 'Analyze Redux actions in a recording. Currently covers Redux/RTK dispatches via source-level
+    instrumentation. Start with mode ''summary'' to see action type frequency and correlation stats. Use
+    ''actions'' to browse dispatches chronologically (filterable by actionType substring). Use ''action-detail''
+    with actionIndex for full correlation data: timing breakdown, selector stats, component render timings,
+    and dispatch origin location. Use ''impact'' with actionIndex for a render impact report with optimization
+    recommendations. Use ''state-shape'' to see a lightweight key/type listing of the state tree (~200–400
+    tokens). RECOMMENDED: use state-shape FIRST to understand the state structure, then drill in. Use
+    ''action-state'' with actionIndex to see actual state values at a dispatch point. STRONGLY RECOMMENDED:
+    use the ''path'' param (e.g. path=''auth.user'') to drill into specific subtrees instead of dumping
+    the entire state tree. Call RecordingOverview first for broader context about the recording.'
+- name: ZustandStores
+  description: Analyze Zustand stores in a recording. Start with mode 'summary' to see all stores and
+    their setState call counts. Use 'store-events' with a storeId to browse setState calls chronologically.
+    Use 'store-state' with storeId and eventIndex to inspect the state at a specific setState call (shows
+    the updater identity, incoming changes, merged result, and previous state). Call RecordingOverview
+    first for broader context about the recording.
+- name: TanStackQueries
+  description: Analyze TanStack Query (React Query) cache events in a recording. Start with mode 'summary'
+    for an overview of all queries with lifecycle stats. Use 'query-events' with queryHash to see the
+    event timeline for a specific query. Use 'query-timeline' for a chronological view across ALL queries.
+    Use 'query-state' with queryHash + eventIndex to inspect cached data at a specific event point. Observer-internal
+    events are filtered by default; use eventType filter to include them. Call RecordingOverview first
+    for broader context about the recording.
+- name: ReactException
+  description: Describe any exceptions thrown which caused React to unmount. This finds React error boundary
+    crashes and render-phase exceptions. The result always starts with an unmount status and an error
+    boundary catch count. When neither is found but the console shows a React error, that error and its
+    thrown stack are reported. For non-React uncaught exceptions, use UncaughtException instead. RecordingOverview
+    includes an error summary — call that first for context.
+- name: UncaughtException
+  description: Describe uncaught exceptions and unhandled promise rejections (runtime errors not caught
+    by try/catch). Reports up to 5 distinct errors in time order. Each entry gives the throw site and
+    the first non-library caller. When every frame is library code, it gives the error text and the thrown
+    stack instead; when the recording has no matching throw (e.g. script syntax errors), just the error
+    text. For React-specific exceptions that unmounted the app, use ReactException instead. RecordingOverview
+    includes an error summary — call that first for context.
+- name: ReactPerformanceInsights
+  description: Run all deterministic React performance checks on a recording and return prioritized findings.
+    Each finding includes user-visible impact, specific timing, affected components, and suggested actions.
+    Use this for a comprehensive performance audit — it detects heavy commits (>50ms), render loops, expensive
+    state updates, and more. Call RecordingOverview first for broader context.
+- name: ListSources
+  description: List the sources in the recording.
+- name: ReadSource
+  description: Read up to 50 lines of code centered around the given line and see what statements executed.
+- name: SearchSources
+  description: 'Search the sources in the recording and see which statements executed. By default, library
+    code (node_modules, CDNs, vendor bundles) is skipped; set `includeGenerated: true` to search it. Note:
+    Playwright test runner code runs in Node outside the browser recording and won''t appear here. Use
+    PlaywrightSteps(mode: test-source) for Playwright test source.'
 - name: ExecutionDelay
-  description: Analyze per-function execution delays in a source file based on source length and breakpoint
-    timing.
-- name: ProfileSampling
-  description: Low-level native engine stack sampling for profiling the Replay runtime itself.
+  description: Computes execution delays for functions based on their source length and the delay before
+    the first breakpoint in each function executes. Each breakpoint is attributed to the innermost function
+    covering it, and each function's weight is computed as its source length minus the sum of its children's
+    lengths.
 - name: GetPointLink
-  description: Generate a shareable app.replay.io URL for a specific execution point.
+  description: Generates an app.replay.io link for users to inspect a given execution point.
+- name: Screenshot
+  description: Lists all screenshot timestamps in the recording, or fetches a screenshot at a given timestamp.
+    Call without timestamp to list all available timestamps. Call with timestamp to get a screenshot URL
+    with mouse position, movements, and time since last click. Set base64=true for raw image data. RecordingOverview
+    suggests a key screenshot timestamp — call that first.
+- name: PlaywrightSteps
+  description: Show all steps taken by Playwright in the recording. Start with mode 'summary' for a test
+    overview with pass/fail status and duration. Use 'steps' with testIndex to see the step list for a
+    specific test (get indices from 'summary'). Use 'step-detail' with stepNumber for inspector protocol
+    commands of a single step (get step numbers from 'steps'). Use 'test-source' with testIndex to read
+    the test source code. For failed tests, use failedOnly=true in 'steps' mode to focus on failures.
+    Call RecordingOverview first for broader context.
+- name: ProfileStatements
+  description: Profiles JS statement execution between two points in a recording. Fetches all breakpoint
+    hits between the points, breaks them down by function, resolves function names, and computes a flat
+    profile and call tree showing statement hits per function and its callees.
+- name: ProfileSampling
+  description: Profiles the native C++ replay engine using stack sampling between two execution points.
+    Runs the replay engine from the begin point to the end point while collecting periodic stack samples,
+    then analyzes the samples to produce a flat profile of where time is spent in native code.
+- name: ProfileGraph
+  description: Profiles dependency graph entry execution between two points in a recording. Enumerates
+    all dependency graph entries including React fiber renders and effect calls, computes the execution
+    associated with each by progress counter differences, traces each entry back to its source via the
+    dependency chain, and groups results by source ordered by execution amount.
+- name: RecordingOverview
+  description: 'Provides a comprehensive overview of a recording: test results, errors, environment info,
+    network activity, React render performance, and suggested next investigation steps. Call this first
+    to understand what happened in a recording before diving into specific tools. NOTE: The first call
+    on a cold recording may take 3-4 minutes while initial data is computed. Set a longer timeout for
+    this tool. Subsequent calls will be fast.'
+- name: WarmRecording
+  description: Starts processing a recording if needed and reports its status. Call this before other
+    tools on a recording that may not be loaded yet. Returns state 'ready' when other tools will respond
+    quickly, 'processing' with phase, progress counts, and an estimated time remaining (eta, may be null)
+    while it is still loading, or 'crashed'/'failed' with an error when the recording cannot be analyzed.
+    Safe to call repeatedly; call again while the state is 'processing'. msSinceLastProgress only indicates
+    a stall in the 'starting' and 'scanning' phases; in 'analyzing' there are no progress updates while
+    the instrument engine runs, so treat eta.exceeded as the sign that something is wrong. The eta is
+    recomputed on every call and can go up, for example when the instrument engine starts; reset any deadline
+    when phase or instrumentEngine.state changes. A crashed or failed server is shut down after a few
+    minutes, and the next call starts a fresh one with a new startedAt; retry at most once since crashes
+    often repeat. When a server replaced an earlier one for the same recording, previousRun says how the
+    earlier one ended; previousRun.unexpected means it died without reporting a crash. That can be the
+    recording (for example running out of memory) or the infrastructure (for example a node reclaimed
+    without warning), so keep waiting on the new server and treat it as a crash only if the next server
+    for the recording also ends unexpectedly.
 deployment:
   mode: remote
   endpoint: https://dispatch.replay.io/nut/mcp
@@ -122,3 +246,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 32
