@@ -1,0 +1,2133 @@
+{
+  "endpoint": "https://dispatch.replay.io/nut/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "replayio-server",
+    "version": "0.0.1"
+  },
+  "result": {
+    "tools": [
+      {
+        "name": "ConsoleMessages",
+        "description": "Show console API messages (console.log, console.warn, console.error, etc.). Note: console errors are distinct from runtime exceptions — use UncaughtException and ReactException for those. Start with mode 'summary' for an overview with message counts and the last errors/warnings. Use 'messages' to browse the full paginated list (filter by level, text, node_modules visibility). Use 'message-detail' with a point reference for full detail on a single message including stack trace. Call RecordingOverview first for broader context.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (overview with counts and last errors, default), messages (paginated filtered list), message-detail (full detail for a single message by point)",
+              "type": "string",
+              "enum": [
+                "summary",
+                "messages",
+                "message-detail"
+              ]
+            },
+            "level": {
+              "default": "all",
+              "description": "Filter by console message level (messages mode only). 'all' shows all levels.",
+              "type": "string",
+              "enum": [
+                "error",
+                "warning",
+                "info",
+                "log",
+                "all"
+              ]
+            },
+            "showNodeModules": {
+              "default": false,
+              "description": "When true, include messages originating from node_modules/library code (messages mode only, default false).",
+              "type": "boolean"
+            },
+            "filterByText": {
+              "description": "Substring filter on message text (messages mode only)",
+              "type": "string"
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25, messages mode only)",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset (messages mode only)",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "point": {
+              "description": "Point reference for message-detail mode (e.g. 'Point:42'). Required for message-detail.",
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "Annotations",
+        "description": "Inspect the annotations in a recording. Annotations are timestamped records attached by the runtime and integrations (e.g. Cypress, Playwright, React DevTools, network, localStorage). Call with no arguments to list all annotation kinds in the recording with their counts. Pass a 'kind' to return the annotation data for that kind (paginated, optionally filtered by text). For WebSocket traffic (DOMWebSocket annotations), use the WebSocketMessages tool instead.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "kind": {
+              "description": "Annotation kind to return data for. When omitted, lists all annotation kinds in the recording with their counts.",
+              "type": "string"
+            },
+            "filterByText": {
+              "description": "Substring filter (case-insensitive) on annotation contents. Only applies when a kind is provided.",
+              "type": "string"
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25). Only applies when a kind is provided.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset. Only applies when a kind is provided.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "DescribePoint",
+        "description": "Describes the application state at a code execution point. Shows the containing function with executed/not-executed annotations, variable values, and timestamps. Use dependencyChain=true to trace the full causal chain back to the origin event. Get execution points from other tools (ConsoleMessages, ReactRenders, ReduxActions, Logpoint, etc.).",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string"
+            },
+            "describeLibraryCode": {
+              "type": "boolean"
+            },
+            "dependencyChain": {
+              "description": "If true, show the full dependency chain from this point back to its origin source.",
+              "type": "boolean"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "point",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "Evaluate",
+        "description": "Evaluates an expression at a code execution point. Use for ad-hoc value inspection beyond what DescribePoint shows. Expressions must be synchronous and immediately inspectable. Do not use async functions or promises; replay cannot inspect their eventual results. Defaults to frame scope; use global scope explicitly when needed. String results are returned in full up to maxStringLength characters (default 100000); longer strings end with a truncation notice giving the stringOffset to read the next part. String results longer than about 8,000 characters are read by evaluating the expression a second time, so use a single, side-effect-free expression to get the full text.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string",
+              "description": "The execution point at which to evaluate the expression. Get point references from tools such as DescribePoint, ConsoleMessages, ReactRenders, ReduxActions, or Logpoint."
+            },
+            "expression": {
+              "type": "string",
+              "description": "A synchronous JavaScript expression to evaluate. Do not use async functions or promises; their eventual results cannot be inspected in replay."
+            },
+            "scope": {
+              "default": "frame",
+              "description": "Evaluate in the selected scope. Frame scope can read local variables at code execution points; global scope evaluates against the page global.",
+              "type": "string",
+              "enum": [
+                "frame",
+                "global"
+              ]
+            },
+            "stringOffset": {
+              "default": 0,
+              "description": "When the result is a string, the character offset to start returning from. Use the offset given in a truncation notice to read the next part.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "maxStringLength": {
+              "default": 100000,
+              "description": "When the result is a string, the maximum number of characters to return (default 100000).",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "point",
+            "expression",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "GetStack",
+        "description": "Gets the call stack at a code execution point. Use to understand execution context. Pair with DescribePoint for full state.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "point",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "GetPointComponent",
+        "description": "Gets the React component being rendered at a code execution point.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "point",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "InspectElement",
+        "description": "Get size, layout, ancestry and render point information for a DOM element. Find relevant code before inspecting elements. Only use this tool sparingly — expensive, requires full DOM layout computation. Prefer ReactComponentTree for component structure.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string",
+              "description": "Execution point, e.g. Point:1. Leave empty to pick point at end of recording."
+            },
+            "element": {
+              "type": "string",
+              "description": "Either a known element reference (e.g., 'Element:42') or CSS selector (e.g., '#button' or '.class'). Must NOT be a Playwright locator call"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "element",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "LocalStorage",
+        "description": "Describe all the accesses made to localStorage. Start with mode 'summary' (default) for a grouped overview: keys with access counts, final values, and timing. Use 'operations' to browse the full chronological access list with pagination. Use keyFilter to narrow by key name (substring match). For large apps, consider filtering by key pattern in results.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "summary: keys grouped with access counts and final values (default). operations: paginated list of individual localStorage accesses.",
+              "type": "string",
+              "enum": [
+                "summary",
+                "operations"
+              ]
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25). Used in 'operations' mode.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset. Used in 'operations' mode.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "keyFilter": {
+              "description": "Only show accesses whose key contains this substring (case-insensitive). Applies to both modes.",
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "Logpoint",
+        "description": "Evaluates an expression at breakpoint hits for a given path and line number. Returns up to 20 hits with their expression evaluation results. Use beginPoint/endPoint to narrow the range. Use column to target a specific statement on the line. Find source paths with ListSources or SearchSources first.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "line": {
+              "type": "number"
+            },
+            "column": {
+              "description": "0-based column number. If specified, the breakpoint will be at or after this column on the given line.",
+              "type": "number"
+            },
+            "expression": {
+              "type": "string"
+            },
+            "beginPoint": {
+              "type": "string"
+            },
+            "endPoint": {
+              "type": "string"
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Output format. 'json' returns structured data; 'markdown' (default) returns formatted text.",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "path",
+            "line",
+            "expression",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "NetworkRequest",
+        "description": "Analyze network requests in the recording. Start with mode 'summary' (default) for high-level stats: total count, failed/slow counts, status code distribution, and top domains. Use 'requests' to browse a paginated table of all requests (filterable by urlFilter, startTime, endTime). Use 'detail' with requestId (from the ID column in the 'requests' table) for full request/response headers, body content, event timeline, and backend function analysis. RECOMMENDED workflow: summary → requests → detail. Call RecordingOverview first for broader context about the recording.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "summary: high-level stats (count, failures, slow, status distribution, top domains). requests: paginated table of all requests. detail: full detail for a single request (headers, body, timing).",
+              "type": "string",
+              "enum": [
+                "summary",
+                "requests",
+                "detail"
+              ]
+            },
+            "requestIndex": {
+              "description": "0-based position in the 'requests' table. Only valid with the same filters used for that table; prefer requestId.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "requestId": {
+              "description": "Request ID from the ID column of the 'requests' table. Preferred way to select a request in 'detail' mode; stable across filters.",
+              "type": "string",
+              "minLength": 1
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25). Used in 'requests' mode.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset. Used in 'requests' mode.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "startTime": {
+              "description": "Only show requests that started at or after this time (ms).",
+              "type": "number"
+            },
+            "endTime": {
+              "description": "Only show requests that started at or before this time (ms).",
+              "type": "number"
+            },
+            "urlFilter": {
+              "description": "Only show requests whose URL contains this substring.",
+              "type": "string",
+              "minLength": 1
+            },
+            "slowThresholdMs": {
+              "default": 2000,
+              "description": "Duration threshold (ms) to consider a request slow. Default 2000.",
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Output format. 'markdown' (default) for human-readable text. 'json' for structured data (summary/requests modes only; detail mode always returns markdown).",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "WebSocketMessages",
+        "description": "Inspect the WebSocket connections in a recording and the messages sent and received on them. Default mode 'connections' lists each connection with its URL, status (open, open until the recording ended, still connecting, never connected, failed to connect, dropped, closed by client, closed) and message counts. Mode 'connection' lists the messages on a connection (paginated, filterable by direction and text); sent messages include a point reference for the send() call. Mode 'message' shows the contents of one message by messageId. JSON messages too large to show whole are shown as an outline of keys, types and sizes; pass path (e.g. 'result.items.3') to see one part. Unknown connectionId or messageId values are rejected with the list of valid IDs.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "connections",
+              "description": "connections: list every WebSocket connection with its URL, status and message counts. connection: list the messages on one connection (or all connections when connectionId is omitted). message: show the full contents of one message.",
+              "type": "string",
+              "enum": [
+                "connections",
+                "connection",
+                "message"
+              ]
+            },
+            "urlFilter": {
+              "description": "Substring filter (case-insensitive) on the connection URL. connections mode only.",
+              "type": "string"
+            },
+            "connectionId": {
+              "description": "Connection ID from connections mode, e.g. \"ws1\". connection mode only.",
+              "type": "string"
+            },
+            "direction": {
+              "description": "Only show messages sent by the page or received from the server. connection mode only.",
+              "type": "string",
+              "enum": [
+                "sent",
+                "received"
+              ]
+            },
+            "filterByText": {
+              "description": "Substring filter (case-insensitive) on message text. connection mode only.",
+              "type": "string"
+            },
+            "messageId": {
+              "description": "Message ID from connection mode, e.g. \"m12\". Required for message mode.",
+              "type": "string"
+            },
+            "limit": {
+              "default": 25,
+              "description": "Page size for connection mode (default 25).",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "connection mode: index of the first message to show. message mode: character offset into non-JSON message text (or a string selected with path), for text too long to show at once.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "path": {
+              "description": "message mode, JSON messages only: dotted path to one part of the message, e.g. 'result.sources.3' or 'params.data'. Large JSON messages are shown as an outline; use the paths from the outline to see the parts you need.",
+              "type": "string"
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Response format: 'markdown' (default) for human-readable output, 'json' for structured data (use only from programmatic callers)",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ReactComponentTree",
+        "description": "Get the structure of the committed/mounted React component tree at a point in time. Start with mode='summary' for an overview of component counts and top-level structure. Use mode='tree' to see a paginated, depth-limited hierarchy with collapse markers. Use mode='subtree' with 'component' to focus on a specific component's ancestors and descendants. Use 'nameFilter' to search for components by name. Use 'hideFilter' to remove noise (e.g. Provider, Consumer). For render-level analysis (timing, waste, causes), use ReactRenders instead.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "format": {
+              "default": "markdown",
+              "description": "Response format. 'markdown' (default) returns formatted text for LLM agents. 'json' returns structured JSON for programmatic callers.",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (stats overview), tree (paginated hierarchy), subtree (focused view on a specific component)",
+              "type": "string",
+              "enum": [
+                "summary",
+                "tree",
+                "subtree"
+              ]
+            },
+            "point": {
+              "description": "The execution point at which to describe the React component tree. Defaults to the end of the recording.",
+              "type": "string"
+            },
+            "maxDepth": {
+              "description": "Max depth to expand. Nodes deeper than this are collapsed with descendant counts. In subtree mode, depth is relative to the focused component.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset into the visible (uncollapsed) tree.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "default": 50,
+              "description": "Pagination page size (default 50).",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "nameFilter": {
+              "description": "Show only components matching this name (case-insensitive substring). Ancestors of matches are auto-expanded for context. Tree mode only.",
+              "type": "string"
+            },
+            "hideFilter": {
+              "description": "Regex pattern — hide components matching this name and reparent their children up. Applied at tree construction time.",
+              "type": "string"
+            },
+            "component": {
+              "description": "Component name or fiber reference (e.g. 'Button' or 'Component:42') to focus on. Required for subtree mode. Shows ancestors + subtree.",
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ReactRenders",
+        "description": "Analyze React renders in a recording. Start with mode 'summary' for a recording-wide overview of commits and render time. Use 'waste-rank' to find components with the most wasted renders. Use 'commits' to browse render commits chronologically. Use 'commit' with commitIndex for single commit detail (get indices from 'commits'). Use 'component' with componentName to see a component across all commits (get names from 'waste-rank'). Use 'fiber' with fiberId to see all renders for a specific fiber instance (add includeProps=true for prop values at each render). Use 'trigger-detail' with commitIndex to trace the dependency chain (click, network, dispatch) that triggered a commit. Use 'commit-fibers' and 'fiber-cause' for fiber-level causation analysis. Call RecordingOverview first for broader context.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (overview), commits (paginated list), commit (single commit detail), waste-rank (component waste ranking), component (single component detail), fiber (single fiber instance across all commits, add includeProps for prop values), commit-fibers (list fibers of a component in a commit), fiber-cause (render cause for a specific fiber), trigger-detail (dependency chain tracing for a commit's trigger events)",
+              "type": "string",
+              "enum": [
+                "summary",
+                "commits",
+                "commit",
+                "waste-rank",
+                "component",
+                "fiber",
+                "commit-fibers",
+                "fiber-cause",
+                "trigger-detail"
+              ]
+            },
+            "commitIndex": {
+              "description": "Commit index — required for 'commit', 'commit-fibers', and 'fiber-cause' modes",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "componentName": {
+              "description": "Component name — required for 'component' and 'commit-fibers' modes",
+              "type": "string"
+            },
+            "fiberId": {
+              "description": "Fiber ID — required for 'fiber' and 'fiber-cause' modes",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25)",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "beginPoint": {
+              "description": "Optional begin point for range filtering",
+              "type": "string"
+            },
+            "endPoint": {
+              "description": "Optional end point for range filtering",
+              "type": "string"
+            },
+            "beginTime": {
+              "description": "Optional begin time (ms) for range filtering",
+              "type": "number"
+            },
+            "endTime": {
+              "description": "Optional end time (ms) for range filtering",
+              "type": "number"
+            },
+            "includeProps": {
+              "description": "When true in 'fiber' mode, evaluate and include component props at each render. Expensive — creates a pause per render to inspect arguments. Use only when you need prop values.",
+              "type": "boolean"
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Response format: 'markdown' (default) for human-readable output, 'json' for structured data (use only from programmatic callers)",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "UserInteractions",
+        "description": "Show all user interactions (clicks and key presses) in the recording. Start with mode 'summary' (default) for interaction counts by type, time range, top keys pressed, and activity timeline. Use 'interactions' to browse a paginated chronological list with point references for DescribePoint, Evaluate, or GetStack. Use type filter ('click' or 'keypress') to narrow by interaction kind. Useful for understanding the sequence of user actions that led to a bug.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "summary: interaction counts by type, time range (default). interactions: paginated chronological list of all interactions.",
+              "type": "string",
+              "enum": [
+                "summary",
+                "interactions"
+              ]
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25). Used in 'interactions' mode.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset. Used in 'interactions' mode.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "type": {
+              "default": "all",
+              "description": "Filter by interaction type. 'click' for mouse clicks, 'keypress' for key presses, 'all' for both.",
+              "type": "string",
+              "enum": [
+                "click",
+                "keypress",
+                "all"
+              ]
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Output format. 'markdown' (default) for human-readable Markdown. 'json' for structured JSON data.",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ReduxActions",
+        "description": "Analyze Redux actions in a recording. Currently covers Redux/RTK dispatches via source-level instrumentation. Start with mode 'summary' to see action type frequency and correlation stats. Use 'actions' to browse dispatches chronologically (filterable by actionType substring). Use 'action-detail' with actionIndex for full correlation data: timing breakdown, selector stats, component render timings, and dispatch origin location. Use 'impact' with actionIndex for a render impact report with optimization recommendations. Use 'state-shape' to see a lightweight key/type listing of the state tree (~200–400 tokens). RECOMMENDED: use state-shape FIRST to understand the state structure, then drill in. Use 'action-state' with actionIndex to see actual state values at a dispatch point. STRONGLY RECOMMENDED: use the 'path' param (e.g. path='auth.user') to drill into specific subtrees instead of dumping the entire state tree. Call RecordingOverview first for broader context about the recording.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (overview of all Redux activity), actions (paginated list of dispatched actions), action-detail (full detail for one action including correlation data), impact (render impact report for a specific dispatch), action-state (Redux state snapshot at a dispatch point — use path param to drill into subtrees), state-shape (lightweight key/type listing of the state tree — cheap overview before drilling in). RECOMMENDED workflow: state-shape → action-state with path → action-diff",
+              "type": "string",
+              "enum": [
+                "summary",
+                "actions",
+                "action-detail",
+                "impact",
+                "action-state",
+                "state-shape"
+              ]
+            },
+            "actionIndex": {
+              "description": "0-based action index — required for 'action-detail' and 'impact' modes",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25)",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "actionType": {
+              "description": "Filter by action type (case-insensitive substring match). Applies to 'actions' mode.",
+              "type": "string"
+            },
+            "beginTime": {
+              "description": "Optional begin time (ms) for range filtering",
+              "type": "number"
+            },
+            "endTime": {
+              "description": "Optional end time (ms) for range filtering",
+              "type": "number"
+            },
+            "path": {
+              "description": "Dot-separated path to drill into a state subtree (action-state, state-shape modes). E.g. 'auth.user.profile'. Omit to see the full state tree (with depth limiting).",
+              "type": "string"
+            },
+            "depth": {
+              "description": "Max serialization depth for action-state mode (1–8, default 4). Use lower values for a quick overview, higher for detailed subtrees.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 8
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ZustandStores",
+        "description": "Analyze Zustand stores in a recording. Start with mode 'summary' to see all stores and their setState call counts. Use 'store-events' with a storeId to browse setState calls chronologically. Use 'store-state' with storeId and eventIndex to inspect the state at a specific setState call (shows the updater identity, incoming changes, merged result, and previous state). Call RecordingOverview first for broader context about the recording.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (overview of all Zustand stores and setState call counts), store-events (paginated timeline of setState calls for a specific store), store-state (evaluate state at a specific setState point — shows updater identity, incoming changes, merged result, and previous state)",
+              "type": "string",
+              "enum": [
+                "summary",
+                "store-events",
+                "store-state"
+              ]
+            },
+            "storeId": {
+              "description": "Store ID — required for 'store-events' and 'store-state' modes. Get available IDs from the 'summary' mode.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "eventIndex": {
+              "description": "0-based index of the setState event within the store — required for 'store-state' mode. Get event indices from 'store-events' mode.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25) — applies to 'store-events' mode",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset — applies to 'store-events' mode",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "depth": {
+              "description": "Max serialization depth for state inspection (1–8, default 3). Use lower values for a quick overview, higher for detailed subtrees.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 8
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "TanStackQueries",
+        "description": "Analyze TanStack Query (React Query) cache events in a recording. Start with mode 'summary' for an overview of all queries with lifecycle stats. Use 'query-events' with queryHash to see the event timeline for a specific query. Use 'query-timeline' for a chronological view across ALL queries. Use 'query-state' with queryHash + eventIndex to inspect cached data at a specific event point. Observer-internal events are filtered by default; use eventType filter to include them. Call RecordingOverview first for broader context about the recording.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (overview of all queries), query-events (timeline of events for a specific query by queryHash), query-timeline (full timeline across ALL queries ordered by time), query-state (evaluate cached data at a specific event point)",
+              "type": "string",
+              "enum": [
+                "summary",
+                "query-events",
+                "query-timeline",
+                "query-state"
+              ]
+            },
+            "queryHash": {
+              "description": "Query hash string — required for query-events and query-state modes",
+              "type": "string"
+            },
+            "eventIndex": {
+              "description": "0-based index of event within the query's event list — required for query-state mode",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25)",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "eventType": {
+              "description": "Filter by event type (e.g. \"updated\", \"added\", \"observerAdded\")",
+              "type": "string"
+            },
+            "depth": {
+              "description": "Max serialization depth for query-state mode (1–8, default 3). Use lower values for a quick overview, higher for detailed data.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 8
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ReactException",
+        "description": "Describe any exceptions thrown which caused React to unmount. This finds React error boundary crashes and render-phase exceptions. The result always starts with an unmount status and an error boundary catch count. When neither is found but the console shows a React error, that error and its thrown stack are reported. For non-React uncaught exceptions, use UncaughtException instead. RecordingOverview includes an error summary — call that first for context.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "UncaughtException",
+        "description": "Describe uncaught exceptions and unhandled promise rejections (runtime errors not caught by try/catch). Reports up to 5 distinct errors in time order. Each entry gives the throw site and the first non-library caller. When every frame is library code, it gives the error text and the thrown stack instead; when the recording has no matching throw (e.g. script syntax errors), just the error text. For React-specific exceptions that unmounted the app, use ReactException instead. RecordingOverview includes an error summary — call that first for context.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ReactPerformanceInsights",
+        "description": "Run all deterministic React performance checks on a recording and return prioritized findings. Each finding includes user-visible impact, specific timing, affected components, and suggested actions. Use this for a comprehensive performance audit — it detects heavy commits (>50ms), render loops, expensive state updates, and more. Call RecordingOverview first for broader context.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "beginPoint": {
+              "description": "Optional begin execution point for range filtering",
+              "type": "string"
+            },
+            "endPoint": {
+              "description": "Optional end execution point for range filtering",
+              "type": "string"
+            },
+            "beginTime": {
+              "description": "Optional begin time (ms) for range filtering",
+              "type": "number"
+            },
+            "endTime": {
+              "description": "Optional end time (ms) for range filtering",
+              "type": "number"
+            },
+            "componentFilter": {
+              "description": "Only include findings involving these components",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "categories": {
+              "description": "Run only specific check categories (default: all available)",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "heavy-commits",
+                  "expensive-state-updates",
+                  "dev-build",
+                  "react-errors",
+                  "error-boundaries",
+                  "render-loops",
+                  "interaction-latency",
+                  "remount-thrash",
+                  "missing-loading-feedback"
+                ]
+              }
+            },
+            "minSeverity": {
+              "description": "Minimum severity to include (default: info)",
+              "type": "string",
+              "enum": [
+                "critical",
+                "warning",
+                "info"
+              ]
+            },
+            "maxFindings": {
+              "description": "Maximum findings to return (default: 30)",
+              "type": "number"
+            },
+            "includeSuppressedFindings": {
+              "description": "Also report findings dropped by same-commit deduplication or the maxFindings cap. Useful when applying your own prioritization policy or debugging check behavior.",
+              "type": "boolean"
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Response format: 'markdown' (default) for human-readable output, 'json' for structured data (use only from programmatic callers)",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ListSources",
+        "description": "List the sources in the recording.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "pathGlob": {
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ReadSource",
+        "description": "Read up to 50 lines of code centered around the given line and see what statements executed.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "line": {
+              "description": "The line at which to center the code window.",
+              "type": "number"
+            },
+            "column": {
+              "description": "0-based column number. When provided with a line, the view will be centered on the breakpoint at or after this column.",
+              "type": "number"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "path",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "SearchSources",
+        "description": "Search the sources in the recording and see which statements executed. By default, library code (node_modules, CDNs, vendor bundles) is skipped; set `includeGenerated: true` to search it. Note: Playwright test runner code runs in Node outside the browser recording and won't appear here. Use PlaywrightSteps(mode: test-source) for Playwright test source.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "Regex pattern to search for."
+            },
+            "pathGlob": {
+              "description": "Path glob pattern.",
+              "type": "string"
+            },
+            "includeGenerated": {
+              "description": "Include generated/bundled sources and node_modules. Required for recordings without sourcemaps.",
+              "type": "boolean"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "pattern",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ExecutionDelay",
+        "description": "Computes execution delays for functions based on their source length and the delay before the first breakpoint in each function executes. Each breakpoint is attributed to the innermost function covering it, and each function's weight is computed as its source length minus the sum of its children's lengths.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "path",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "GetPointLink",
+        "description": "Generates an app.replay.io link for users to inspect a given execution point.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "point",
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "Screenshot",
+        "description": "Lists all screenshot timestamps in the recording, or fetches a screenshot at a given timestamp. Call without timestamp to list all available timestamps. Call with timestamp to get a screenshot URL with mouse position, movements, and time since last click. Set base64=true for raw image data. RecordingOverview suggests a key screenshot timestamp — call that first.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "timestamp": {
+              "type": "number"
+            },
+            "base64": {
+              "type": "boolean"
+            },
+            "element": {
+              "type": "string",
+              "description": "Either a known element reference (e.g., 'Element:42') or CSS selector (e.g., '#button' or '.class'). Crops screenshot to element bounds."
+            },
+            "format": {
+              "default": "markdown",
+              "description": "Output format. 'markdown' (default) returns human-readable text. 'json' returns structured JSON. Ignored when base64=true.",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "PlaywrightSteps",
+        "description": "Show all steps taken by Playwright in the recording. Start with mode 'summary' for a test overview with pass/fail status and duration. Use 'steps' with testIndex to see the step list for a specific test (get indices from 'summary'). Use 'step-detail' with stepNumber for inspector protocol commands of a single step (get step numbers from 'steps'). Use 'test-source' with testIndex to read the test source code. For failed tests, use failedOnly=true in 'steps' mode to focus on failures. Call RecordingOverview first for broader context.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "summary",
+              "description": "Analysis mode: summary (test overview with pass/fail), steps (paginated step list for a test), step-detail (inspector protocol commands for a single step), test-source (test source code)",
+              "type": "string",
+              "enum": [
+                "summary",
+                "steps",
+                "step-detail",
+                "test-source"
+              ]
+            },
+            "testIndex": {
+              "description": "0-based test index — required for 'steps' and 'test-source' modes",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "stepNumber": {
+              "description": "1-based step number — required for 'step-detail' mode. If provided without a mode, automatically selects 'step-detail' mode.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "failedOnly": {
+              "description": "When true, only show failed steps (steps mode only)",
+              "type": "boolean"
+            },
+            "last": {
+              "description": "Show only the last N steps (steps mode only)",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "collapseRetries": {
+              "default": true,
+              "description": "Group consecutive retry attempts (3+ identical apiName+params) into collapsed summaries (steps mode only). Defaults to true.",
+              "type": "boolean"
+            },
+            "limit": {
+              "default": 25,
+              "description": "Pagination page size (default 25, steps mode only)",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "default": 0,
+              "description": "Pagination offset (steps mode only)",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ProfileStatements",
+        "description": "Profiles JS statement execution between two points in a recording. Fetches all breakpoint hits between the points, breaks them down by function, resolves function names, and computes a flat profile and call tree showing statement hits per function and its callees.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "beginPoint": {
+              "description": "The start execution point. Defaults to the beginning of the recording.",
+              "type": "string"
+            },
+            "endPoint": {
+              "description": "The end execution point. Defaults to the end of the recording.",
+              "type": "string"
+            },
+            "maxHits": {
+              "description": "Maximum number of breakpoint hits to scan. Defaults to 1000000.",
+              "type": "number"
+            },
+            "coverageFraction": {
+              "description": "Fraction of total hits to cover (0-1). Functions are included in order of hit count until this fraction is reached. Defaults to 0.95.",
+              "type": "number"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ProfileSampling",
+        "description": "Profiles the native C++ replay engine using stack sampling between two execution points. Runs the replay engine from the begin point to the end point while collecting periodic stack samples, then analyzes the samples to produce a flat profile of where time is spent in native code.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "beginPoint": {
+              "description": "The start execution point. Defaults to the beginning of the recording.",
+              "type": "string"
+            },
+            "endPoint": {
+              "description": "The end execution point. Defaults to the end of the recording.",
+              "type": "string"
+            },
+            "profilingIntervalMs": {
+              "description": "Sampling interval in milliseconds. Defaults to 20ms.",
+              "type": "number"
+            },
+            "numProfiles": {
+              "description": "Number of profiles to run and average. Defaults to 1.",
+              "type": "number"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "ProfileGraph",
+        "description": "Profiles dependency graph entry execution between two points in a recording. Enumerates all dependency graph entries including React fiber renders and effect calls, computes the execution associated with each by progress counter differences, traces each entry back to its source via the dependency chain, and groups results by source ordered by execution amount.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "beginPoint": {
+              "description": "The start execution point. Defaults to the beginning of the recording.",
+              "type": "string"
+            },
+            "endPoint": {
+              "description": "The end execution point. Defaults to the end of the recording.",
+              "type": "string"
+            },
+            "coverageFraction": {
+              "description": "Fraction of total execution to cover (0-1). Sources are included in order of execution amount until this fraction is reached. Within each source, entries are similarly filtered. Defaults to 0.95.",
+              "type": "number"
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "RecordingOverview",
+        "description": "Provides a comprehensive overview of a recording: test results, errors, environment info, network activity, React render performance, and suggested next investigation steps. Call this first to understand what happened in a recording before diving into specific tools. NOTE: The first call on a cold recording may take 3-4 minutes while initial data is computed. Set a longer timeout for this tool. Subsequent calls will be fast.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "format": {
+              "default": "markdown",
+              "description": "Response format: 'markdown' (default) for human-readable output, 'json' for structured data (use only from programmatic callers)",
+              "type": "string",
+              "enum": [
+                "markdown",
+                "json"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      },
+      {
+        "name": "WarmRecording",
+        "description": "Starts processing a recording if needed and reports its status. Call this before other tools on a recording that may not be loaded yet. Returns state 'ready' when other tools will respond quickly, 'processing' with phase, progress counts, and an estimated time remaining (eta, may be null) while it is still loading, or 'crashed'/'failed' with an error when the recording cannot be analyzed. Safe to call repeatedly; call again while the state is 'processing'. msSinceLastProgress only indicates a stall in the 'starting' and 'scanning' phases; in 'analyzing' there are no progress updates while the instrument engine runs, so treat eta.exceeded as the sign that something is wrong. The eta is recomputed on every call and can go up, for example when the instrument engine starts; reset any deadline when phase or instrumentEngine.state changes. A crashed or failed server is shut down after a few minutes, and the next call starts a fresh one with a new startedAt; retry at most once since crashes often repeat. When a server replaced an earlier one for the same recording, previousRun says how the earlier one ended; previousRun.unexpected means it died without reporting a crash. That can be the recording (for example running out of memory) or the infrastructure (for example a node reclaimed without warning), so keep waiting on the new server and treat it as a crash only if the next server for the recording also ends unexpectedly.",
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "waitSeconds": {
+              "description": "How long to wait for processing to finish before returning the current status. Defaults to 60, capped at 60. Use 0 to return immediately.",
+              "type": "number"
+            },
+            "expectLibraryInstrumentation": {
+              "description": "Whether the recording is known to use a library the backend instruments, such as React. Only affects the upper bound of the time estimate before library detection finishes; false gives a tighter upper bound. Omit if unknown. The recording keeps one value; the most recent caller to pass it wins.",
+              "type": "boolean"
+            },
+            "until": {
+              "description": "What to wait for before returning. 'ready' (default) waits until other tools will respond quickly. 'scanned' returns once region scanning has finished (scan.done), which is enough to open the recording in a debugger but not for analysis tools.",
+              "type": "string",
+              "enum": [
+                "ready",
+                "scanned"
+              ]
+            },
+            "recordingId": {
+              "type": "string",
+              "description": "The ID of the recording to analyze."
+            }
+          },
+          "required": [
+            "recordingId"
+          ]
+        },
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "execution": {
+          "taskSupport": "forbidden"
+        },
+        "_meta": {
+          "securitySchemes": [
+            {
+              "type": "oauth2",
+              "scopes": [
+                "openid",
+                "profile",
+                "email"
+              ]
+            }
+          ],
+          "openai/visibility": "public"
+        }
+      }
+    ]
+  }
+}
